@@ -1,6 +1,6 @@
 from ubuntu:14.04
 
-MAINTAINER Nayan V. <nayan@krishtechnolabs.com>
+MAINTAINER Nayan V. <nayanvanza91@gmail.com>
 
 RUN apt-get update && apt-get install -y vim \
     && apt-get install -y software-properties-common \
@@ -65,15 +65,13 @@ ADD tools/docker/php7/fpm/php.ini /etc/php/7.0/fpm/php.ini
 ADD tools/docker/php7/fpm/php-fpm.conf /etc/php/7.0/fpm/php-fpm.conf
 ADD tools/docker/php7/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf
 ADD tools/docker/phpmyadmin/config.inc.php /phpmyadmin/config.inc.php
-#ADD tools/docker/postfix/main.cf /etc/postfix/main.cf
+
 ADD tools/docker/supervisor/supervisord.conf /etc/supervisor/
 ADD tools/docker/supervisor/conf.d/apps.conf /etc/supervisor/conf.d/apps.conf
 ADD tools/docker/scripts/start.sh /start.sh
-#ADD tools/docker/scripts/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /*.sh
 
-EXPOSE 22 80 443 3306
+EXPOSE 22 80 443 3306 8080 9200
 
-#ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/bin/bash", "/start.sh"]
