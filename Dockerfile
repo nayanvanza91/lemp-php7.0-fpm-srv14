@@ -68,10 +68,13 @@ ADD tools/docker/phpmyadmin/config.inc.php /phpmyadmin/config.inc.php
 
 ADD tools/docker/supervisor/supervisord.conf /etc/supervisor/
 ADD tools/docker/supervisor/conf.d/apps.conf /etc/supervisor/conf.d/apps.conf
+
+#ADD tools/docker/scripts/entrypoint.sh /entrypoint.sh
 ADD tools/docker/scripts/start.sh /start.sh
 
 RUN chmod +x /*.sh
 
 EXPOSE 22 80 443 3306 8080 9200
 
+#ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["/bin/bash", "/start.sh"]
