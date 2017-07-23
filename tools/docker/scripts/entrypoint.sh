@@ -9,4 +9,5 @@ if [ ! -f docker_initialized ]; then
 fi
 
 exec "$@"
+
 #exec supervisord -n
