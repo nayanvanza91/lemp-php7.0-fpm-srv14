@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y vim \
     && apt-get install -y apt-transport-https \
     && apt-get install -y supervisor \
     && apt-get install -y postfix \
+    && apt-get install -y rsyslog \
     && apt-get install -y openssh-server \
     && mkdir /var/run/sshd \
     && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
