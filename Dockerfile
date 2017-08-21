@@ -31,8 +31,7 @@ RUN apt-get update && apt-get install -y vim \
     && echo "deb-src http://nginx.org/packages/mainline/ubuntu/ trusty nginx" >> /etc/apt/sources.list \
     && apt-get -y update \
     && apt-get install -y nginx \
-    && usermod -a -G nginx,www-data nginx \
-    && usermod -a -G www-data,nginx www-data \
+    && usermod -a -G www-data nginx \
     && cd /tmp/ \
     && wget https://repo.percona.com/apt/percona-release_0.1-4.$(lsb_release -sc)_all.deb \
     && dpkg -i percona-release_0.1-4.$(lsb_release -sc)_all.deb \
@@ -51,8 +50,8 @@ RUN apt-get update && apt-get install -y vim \
     && tar xvzf phpMyAdmin-4.5.2-english.tar.gz \
     && mv phpMyAdmin-4.5.2-english phpmyadmin \
     && rm -rf phpMyAdmin-4.5.2-english.tar.gz \
-    && chown -R www-data:www-data phpmyadmin \
     && mv phpmyadmin/config.sample.inc.php phpmyadmin/config.inc.php \
+    && chown -R www-data:www-data phpmyadmin \
     && apt-get update \
     && curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
