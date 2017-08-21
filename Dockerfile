@@ -5,16 +5,17 @@ MAINTAINER Nayan V. <nayanvanza91@gmail.com>
 RUN apt-get update && apt-get install -y vim \
     && apt-get install -y software-properties-common \
     && apt-get install -y python-software-properties \
+    && apt-get install -y apt-transport-https \
     && apt-get install -y build-essential \
     && apt-get install -y tcl8.5 \
     && apt-get install -y cron \
     && apt-get install -y curl \
     && apt-get install -y rsync \
     && apt-get install -y git \ 
-    && apt-get install -y apt-transport-https \
     && apt-get install -y supervisor \
-    && apt-get install -y postfix \
     && apt-get install -y rsyslog \
+    && apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev \
+    && apt-get install -y postfix mailutils libsasl2-2 libsasl2-modules \
     && apt-get install -y openssh-server \
     && mkdir /var/run/sshd \
     && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
@@ -32,6 +33,7 @@ RUN apt-get update && apt-get install -y vim \
     && apt-get -y update \
     && apt-get install -y nginx \
     && usermod -a -G www-data nginx \
+    && apt-get install -y apache2-utils \
     && cd /tmp/ \
     && wget https://repo.percona.com/apt/percona-release_0.1-4.$(lsb_release -sc)_all.deb \
     && dpkg -i percona-release_0.1-4.$(lsb_release -sc)_all.deb \
