@@ -5,17 +5,16 @@ MAINTAINER Nayan V. <nayanvanza91@gmail.com>
 RUN apt-get update && apt-get install -y vim \
     && apt-get install -y software-properties-common \
     && apt-get install -y python-software-properties \
-    && apt-get install -y apt-transport-https \
     && apt-get install -y build-essential \
     && apt-get install -y tcl8.5 \
     && apt-get install -y cron \
     && apt-get install -y curl \
     && apt-get install -y rsync \
-    && apt-get install -y git \ 
+    && apt-get install -y git \
+    && apt-get install -y apt-transport-https \
     && apt-get install -y supervisor \
+    && apt-get install -y postfix \
     && apt-get install -y rsyslog \
-    && apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev \
-    && apt-get install -y postfix mailutils libsasl2-2 libsasl2-modules \
     && apt-get install -y openssh-server \
     && mkdir /var/run/sshd \
     && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
@@ -32,8 +31,8 @@ RUN apt-get update && apt-get install -y vim \
     && echo "deb-src http://nginx.org/packages/mainline/ubuntu/ trusty nginx" >> /etc/apt/sources.list \
     && apt-get -y update \
     && apt-get install -y nginx \
-    && usermod -a -G www-data nginx \
-    && apt-get install -y apache2-utils \
+    && usermod -a -G nginx,www-data nginx \
+    && usermod -a -G www-data,nginx www-data \
     && cd /tmp/ \
     && wget https://repo.percona.com/apt/percona-release_0.1-4.$(lsb_release -sc)_all.deb \
     && dpkg -i percona-release_0.1-4.$(lsb_release -sc)_all.deb \
@@ -52,8 +51,8 @@ RUN apt-get update && apt-get install -y vim \
     && tar xvzf phpMyAdmin-4.5.2-english.tar.gz \
     && mv phpMyAdmin-4.5.2-english phpmyadmin \
     && rm -rf phpMyAdmin-4.5.2-english.tar.gz \
-    && mv phpmyadmin/config.sample.inc.php phpmyadmin/config.inc.php \
     && chown -R www-data:www-data phpmyadmin \
+    && mv phpmyadmin/config.sample.inc.php phpmyadmin/config.inc.php \
     && apt-get update \
     && curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
@@ -61,12 +60,13 @@ RUN apt-get update && apt-get install -y vim \
 
 ADD tools/docker/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD tools/docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-ADD tools/docker/nginx/conf.d/pma.conf /etc/nginx/conf.d/pma.conf
+ADD tools/docker/nginx/conf.d/phpmyadmin.conf /etc/nginx/conf.d/phpmyadmin.conf
 ADD tools/docker/php7/cli/php.ini /etc/php/7.0/cli/php.ini
 ADD tools/docker/php7/fpm/php.ini /etc/php/7.0/fpm/php.ini
 ADD tools/docker/php7/fpm/php-fpm.conf /etc/php/7.0/fpm/php-fpm.conf
 ADD tools/docker/php7/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf
 ADD tools/docker/phpmyadmin/config.inc.php /phpmyadmin/config.inc.php
+#ADD tools/docker/postfix/main.cf /etc/postfix/main.cf
 
 ADD tools/docker/supervisor/supervisord.conf /etc/supervisor/
 ADD tools/docker/supervisor/conf.d/apps.conf /etc/supervisor/conf.d/apps.conf
@@ -76,7 +76,7 @@ ADD tools/docker/scripts/start.sh /start.sh
 
 RUN chmod +x /*.sh
 
-EXPOSE 22 80 443 3306 8080 9200
+EXPOSE 22 80 443 3306 8080 8888 9200
 
 #ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["/bin/bash", "/start.sh"]
